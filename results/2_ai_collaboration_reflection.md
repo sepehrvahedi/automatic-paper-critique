@@ -46,8 +46,8 @@ The system was built as a comprehensive Jupyter notebook with:
 
 ### Process Statistics:
 - **Total LLM Interactions:** 20
-- **Successful Interactions:** 20
-- **Total Processing Time:** 757.11 seconds
+- **Successful Interactions:** 18
+- **Total Processing Time:** 1110.37 seconds
 - **Component Extraction Tasks:** 3
 - **Component Ranking Tasks:** 12
 
