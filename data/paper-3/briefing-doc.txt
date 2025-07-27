@@ -1,0 +1,148 @@
+Here is a comprehensive briefing document for the research paper "Lightweight Dynamic Build Batching Algorithms for Continuous Integration":
+
+---
+
+## Briefing Document: Lightweight Dynamic Build Batching Algorithms for Continuous Integration
+
+**Authors:** Divya M. Kamath, Bram Adams, Ahmed E. Hassan
+
+**Source:** Empirical Software Engineering manuscript No. (will be inserted by the editor)
+
+### 1. Executive Summary with Key Contributions and Findings
+
+This research paper addresses the significant **cost of Continuous Integration (CI)** in software engineering, which is driven by the large daily volume of pull requests. CI involves virtually merging developers’ pull requests with the codebase to perform essential builds and tests for quality assurance. The paper proposes a **fully online, more flexible dynamic batching technique** called **Lightweight Dynamic Batching (LWD)** to reduce these costs.
+
+**Key Contributions and Findings:**
+
+*   **Novel LWD Technique:** The authors introduce a new LWD algorithm that is configurable on-the-fly and updates batch sizes solely based on the outcome of the previous batch build. This contrasts with prior state-of-the-art dynamic batching, which relied on offline generated lookup tables and historical data.
+*   **Performance Equivalence:** Empirical evaluation across 286,848 commits from 50 open-source projects using TravisCI demonstrated that LWD can perform **equally well to more complex state-of-the-art dynamic batching techniques**. This supports the Occam's Razor principle, favoring simpler solutions when performance is comparable.
+*   **Significant Build Savings over Static Batching:** LWD saves a median of **4.75% more builds than static batching techniques**. Specifically, LWD BatchBisect variants saved 10.71% more, LWD BatchStop4 saved 4.75% more, and LWD BatchDivide4 saved 1.73% more builds compared to their static counterparts.
+*   **Limited Impact of CI-Skip Integration:** The study found that while CI-Skip rules alone are effective, their **addition to dynamic batching algorithms (both LWD and state-of-the-art) does not significantly improve build savings**.
+
+### 2. Detailed Methodology Breakdown with Technical Approaches Used
+
+The study focuses on **reducing the number of CI builds scheduled** through rule-based heuristics, specifically **Batching** and **CI-Skip**, as opposed to AI-based approaches which incur additional costs like data gathering and model retraining.
+
+*   **Continuous Integration (CI):** A popular quality assurance process where a developer's pull request is virtually integrated with the code base to build and test changed code, typically before or during code review. It is costly in terms of time, energy, and computing resources.
+*   **Batching:** This technique combines multiple incoming commits into a single build. If a batch build fails, **fallback algorithms** are used to identify the individual culprit commits.
+    *   **Static Batching:** Uses a **fixed number of commits** as the batch size. If a batch fails, fallback algorithms are used to identify culprits. Drawbacks include bisection overhead with many failing commits.
+    *   **Dynamic Batching (State-of-the-Art):** Introduced by Bavand et al., this technique **adapts batch sizes** using a mathematical model that employs weighted smoothing and failure rate to suggest an optimal batch size. Its primary limitation is reliance on a **fixed lookup table generated offline**, making it inflexible for on-the-fly modifications or new projects.
+*   **Lightweight Dynamic Batching (LWD):** The core contribution, LWD, is a dynamic batching algorithm that **updates batch sizes based solely on the outcome (failure rate) of the previous batch build**. It operates on "local knowledge" without requiring offline simulations or complex historical data calculations.
+    *   **Four Basic Principles of LWD:**
+        *   **Fallback Rule:** If the failure rate of the most recent batch exceeds a given X%, the next batch size defaults to 1 to avoid unnecessary bisection overhead during streaks of failing commits.
+        *   **Retention Rule:** The batch size is retained if the most recent batch had a successful final commit and a failure rate less than Y%.
+        *   **Factor Rule:** New batch sizes are obtained by adding, subtracting, multiplying, or dividing the current batch size by a configurable factor.
+        *   **Customizability Rule:** Engineers can configure elements like maximum/minimum batch size, factor, retention limit, and fallback limit to suit project needs and CI phases.
+    *   **LWD Variants:** Five main variants determine how the new batch size is estimated:
+        *   **Atomic (Single Condition):**
+            *   **Linear:** Increments/decrements batch size by a constant factor (e.g., `current + factor`, `current - factor`).
+            *   **Exponential:** Multiplies/divides batch size by a constant factor (e.g., `current * factor`, `current ÷ factor`).
+            *   **Random:** Uses randomly chosen factors or batch sizes for updates (e.g., `current + random(current, maximum)`).
+        *   **Composite (If-Else Conditions):**
+            *   **Mixed:** Uses a series of if-else conditions to decide the next batch size, potentially falling back to minimum.
+            *   **Most Frequently Used (MFU):** Similar to Mixed, but defaults to the most frequently used batch size for the project when facing high failure rates.
+    *   **Fallback Algorithms for LWD and Baselines:** All batching techniques (LWD, static, dynamic) rely on one of three bisection-based fallback algorithms to identify culprit commits:
+        *   **BatchBisect:** Halves the failing batch recursively until a single commit is reached.
+        *   **BatchStop4:** Bisects until the batch size reaches 4, then builds the remaining 4 commits individually.
+        *   **BatchDivide4:** Divides the batch into 4 groups, then applies BatchStop4 to each.
+*   **CI-Skip Rules:** A rule-based technique to prevent unnecessary CI builds for specific types of commits (e.g., changes to documentation, comments, meta files, formatting, or version preparation).
+*   **Evaluation Methodology:**
+    *   **Build Simulator:** A custom build simulator was constructed to sequentially replay and recalculate build outcomes of project commits.
+    *   **Performance Metric:** **Percentage of builds saved** compared to the **TestAll baseline** (which builds every commit individually). Calculated as: `(Number of builds made / Total commits in the project)`.
+    *   **Statistical Analysis:** Wilcoxon signed-rank tests (for 2 paired distributions) and Friedman tests with post-hoc Conover tests (for >2 paired distributions) were used to identify significant differences. Effect sizes were measured using Cliff’s Delta (for 2 groups) and Kendall’s W (for >2 groups).
+
+### 3. Main Results and their Significance
+
+The study addressed three research questions (RQs):
+
+*   **RQ1: What is the best LWD approach to dynamically update the batch size?**
+    *   LWD techniques generally save between a median of **37.38% and 48.86% builds**.
+    *   For Linear LWD, factor value **3 was best with BatchDivide4**, while factors 1 and 4 showed slight advantages with BatchBisect and BatchStop4 respectively (though not statistically significant for the latter two).
+    *   No particular Random variant statistically outperformed others, but **Random-Jump and Random-Exponential performed slightly better** for different fallback algorithms.
+    *   For Exponential, Mixed, and MFU techniques, **Factor 2 generally performed better** based on median values, although no statistical difference was found between factors 2 and 3.
+    *   The **Linear-4 BatchStop4 LWD variant performed the best overall** among all LWD variants, showing significantly higher build savings than Linear-1 BatchBisect and Exponential-2 BatchDivide4 sub-variants. This variant had the highest median (45.57%) and maximum (79.68%) build savings.
+    *   The performance differences among LWD variants are attributed to their interaction with underlying culprit-finding algorithms (e.g., Linear-1 LWD works well with BatchBisect's small batch sizes, while Exponential works better with BatchDivide4's larger batch sizes).
+
+*   **RQ2: How does LWD perform in comparison to state-of-the-art static and dynamic batching techniques?**
+    *   **LWD significantly outperforms static batching:** LWD consistently saved more builds than static batching techniques, with a median of **4.75% more builds saved overall** compared to static batching. This difference was statistically significant in 41 out of 50 studied pairs of heuristics, with large effect sizes (0.23 to 0.61).
+    *   **LWD performs equally well as state-of-the-art dynamic batching:** Despite its simpler approach, LWD variants were able to **match the performance of the more complex state-of-the-art dynamic batching technique**. No statistical difference was found between any LWD variant and the baseline dynamic technique. This indicates that simpler LWD, even with random batch size updates, is as effective as state-of-the-art dynamic batching, without the need for offline simulations or complex calculations.
+
+*   **RQ3: Does the addition of CI-Skip rules make batching more effective?**
+    *   While CI-Skip rules alone saved a median of 5.51% builds, their integration with **dynamic batching techniques (LWD or baseline dynamic) did not correlate with significant additional build savings**. The combination only saved a median of 0.87% builds in addition. This suggests batching heuristics have a higher impact on failing commits than on successful commits, which CI-Skip primarily targets.
+
+### 4. Research Context and Related Work Positioning
+
+CI is a widely adopted but **costly process** in software development, with large companies reporting annual costs in millions of dollars. Researchers aim to reduce these costs either by **scheduling fewer builds** or by making scheduled builds faster. This study focuses on the former, specifically on **rule-based approaches** like CI-Skip and Batching.
+
+*   **Contrast with AI-based approaches:** The paper highlights that AI-based techniques, while effective, come with additional costs for data gathering, model training, retraining due to data drift, and potential prediction errors. The authors deliberately **avoid machine learning models**, focusing on lightweight rule-based techniques.
+*   **Evolution of Batching:** Batching has been used by companies for a long time. Initial techniques used fixed batch sizes, employing fallback algorithms like BatchBisect upon failure. **Dynamic batching** was introduced by Bavand et al. to adapt batch sizes based on a mathematical model and weighted smoothing, but it relied on an offline lookup table. The current work improves on this by providing a **fully online, flexible, and customizable dynamic batching approach (LWD)**.
+*   **CI-Skip Rules:** Abdalkareem et al. pioneered CI-Skip rules, identifying specific commit characteristics that allow them to be integrated without triggering CI builds (e.g., documentation, comments, formatting). This study is the **first to empirically combine CI-Skip rules with commit batching techniques**.
+*   **Occam's Razor and Local Models:** The study aligns with Occam's Razor, advocating for simpler theories when competing hypotheses perform similarly. It also draws parallels with the concept of **local vs. global models** in software analytics, arguing that LWD's reliance on "local knowledge" (previous batch's failure rate) makes it simpler and equally effective as global models that require extensive historical data.
+
+### 5. Dataset and Experimental Setup Details
+
+*   **Data Source:** The study used the most recently available **TravisTorrent data dump (released January 25, 2017)**. TravisTorrent synthesizes data from Travis CI and GitHub.
+*   **Dataset Filtering:**
+    *   Initial data: 3,881,992 builds from 948 projects.
+    *   Filtered to **Java-based projects**: 401,767 builds from 241 Java projects.
+    *   Retained projects with **over 2,000 commits**: 53 projects remained.
+    *   Limited to builds on the **"master" branch** and filtered out the **first 100 builds** for testing purposes.
+    *   Final dataset: **50 open-source projects** with 286,848 commits, having failure rates varying from **5.84% to 98.32%**.
+*   **Studied Heuristics and Variants:**
+    *   **TestAll:** Baseline (no batching).
+    *   **Static Batching:** Variants using fixed batch sizes (2, 4, 8, 16) with BatchBisect; and (4, 8, 16) with BatchStop4 and BatchDivide4.
+    *   **State-of-the-art Dynamic Batching:** Three variants, each with BatchBisect, BatchStop4, or BatchDivide4 as fallback.
+    *   **LWD Variants:** All five LWD batch updating techniques (Linear, Exponential, Random, Mixed, MFU) were combined with each of the three fallback algorithms, creating 39 sub-variants.
+        *   **Default Starting Batch Size:** 16.
+        *   **Customizable Parameters:** Retention limit (20%), fallback limit (40%).
+        *   **Maximum Batch Size:** Set to 16 commits.
+        *   **Factor Values:** Limited to {2, 3} for Exponential, Mixed, MFU, and {2, 3, 4} for Random-Exponential to avoid excessively large batch sizes.
+        *   **Min/Med/Max Limits for Composite:** 10, 20, 50 respectively.
+*   **CI-Skip Integration:** CI-Skip rules were applied *before* batching, filtering out skippable commits, and then the remaining commits were batched.
+
+### 6. Limitations and Assumptions Explicitly Mentioned by Authors
+
+The authors acknowledge several threats to the validity of their study:
+
+*   **Construct Validity:**
+    *   The primary performance metric, **percentage of builds saved**, does not directly represent the time, computing resources, or energy conserved.
+    *   **Wall-clock time saved** was estimated for only 41 of the 50 projects (due to missing build duration data) and involved approximations (e.g., batch build duration estimated as time for the last commit plus bisection time), which may not be 100% accurate.
+*   **Internal Validity:**
+    *   The entire simulation, data analysis, and processing were conducted by a **single author**, posing a potential risk of human error or bias from faulty scripts or missing data. This risk was mitigated by carefully using existing replication packages from prior studies.
+*   **External Validity:**
+    *   The study's focus on **Java-based projects** was influenced by the design of the CI-Skip rules. The results might not generalize to projects in other programming languages.
+    *   The dataset was limited to **large, open-source projects** with at least 2,000 commits. The results may vary for **smaller or proprietary projects**, or projects using different build and CI tools.
+*   **Conclusion Validity:**
+    *   The authors used appropriate statistical tests (Wilcoxon, Friedman, Conover) and applied **Bonferroni correction** where applicable to reduce the risk of Type-I errors (false positives).
+
+### 7. Future Work Directions Suggested
+
+The authors suggest several avenues for future research:
+
+*   **Wider Application:** Estimating the results of LWD heuristics on **smaller projects**.
+*   **Language and Tool Diversity:** Evaluating LWD on projects using **different programming languages**, **build tools**, and **CI tools**.
+*   **Proprietary Projects:** Analyzing the performance of LWD for **proprietary projects**, as their characteristics might differ from open-source ones.
+*   **Adaptive Strategy Switching:** Exploring when and how projects might **switch between different LWD approaches** (or their customizations) based on changes in the development cycle or performance monitoring.
+
+### 8. Technical Terminology and Key Concepts Defined
+
+*   **Continuous Integration (CI):** A widely adopted software engineering practice where developers frequently integrate their code changes into a shared main branch, which then triggers automated builds and tests to detect integration issues early.
+*   **Pull Request:** A formal proposal by a developer to merge their code changes from a feature branch into a main branch of a repository.
+*   **Build:** The process of compiling source code into executable programs and running associated tests. In CI, this is often automated.
+*   **Batching:** A cost-reduction technique in CI where multiple individual code commits are grouped together and processed (built and tested) as a single unit or "batch".
+*   **Static Batching:** A type of batching where the number of commits grouped into a single build (the batch size) is fixed and does not change.
+*   **Dynamic Batching:** A type of batching where the batch size is adjusted adaptively based on certain criteria, such as build outcomes or failure rates.
+*   **Lightweight Dynamic Batching (LWD):** A specific, fully online dynamic batching technique proposed in this paper that updates batch sizes based only on the outcome of the immediately preceding batch build, without requiring complex offline calculations or historical lookup tables.
+*   **Fallback Algorithm:** A strategy used in batching to identify which specific commit(s) caused a batch build to fail, typically by breaking down the failed batch into smaller sub-batches and re-running builds.
+    *   **BatchBisect:** A fallback algorithm that repeatedly halves a failing batch until the individual failing commit(s) are identified.
+    *   **BatchStop4:** A fallback algorithm that bisects a failing batch until the sub-batch size reaches 4, at which point all 4 commits are built individually.
+    *   **BatchDivide4:** A fallback algorithm that generalizes BatchStop4 by first dividing a batch into 4 groups of similar sizes and then applying BatchStop4 to each group.
+*   **CI-Skip Rules:** A set of predefined rules that identify certain types of commits (e.g., documentation changes, code formatting, comment-only changes) that are considered safe to integrate without triggering a full CI build, thereby saving resources.
+*   **TestAll Baseline:** A baseline for performance measurement where every incoming commit is built individually, serving as a reference point for calculating "builds saved" by batching techniques (since TestAll saves 0 builds).
+*   **Failure Rate (in LWD context):** The proportion of failing builds within a completed batch. LWD uses this local information to decide the next batch size.
+*   **Weighted Failure Rate:** Used in state-of-the-art dynamic batching, it's a weighted moving average of build failures from the last 'C' commits, where newer commits typically have higher weights.
+*   **Occam's Razor:** A philosophical principle stating that, among competing hypotheses, the one with the fewest assumptions should be preferred. In computing, it suggests simpler models might be better if they perform equally well.
+*   **Local vs. Global Models:** In software analytics, local models base decisions on limited, immediate knowledge, while global models require a broader, system-wide view of data. LWD is considered a local model.
+*   **Replication Package:** Supplementary materials provided by researchers (often online) that include datasets, scripts, or tools necessary to reproduce their experiments and results.
+
+---

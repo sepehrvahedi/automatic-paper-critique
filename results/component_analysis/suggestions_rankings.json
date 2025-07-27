@@ -1,0 +1,58 @@
+{
+  "gpt": [
+    "Explore Adaptive LWD Parameter Tuning",
+    "Analyze Broader Resource Impacts Beyond Builds",
+    "Evaluate on Diverse Languages and Project Scales",
+    "Adaptive Hybridization of Batching and CI-Skip Strategies",
+    "Dynamic Parameter Tuning Mechanisms",
+    "Develop Adaptive Parameter Optimization Mechanisms",
+    "Cross-Language and Tool Evaluation of LWD",
+    "Cross-Platform and Language Evaluation",
+    "Comprehensive Resource Efficiency Analysis",
+    "Integration with Resource Consumption Metrics",
+    "Evaluate LWD in Diverse CI/CD Environments",
+    "Investigate Language-Specific CI-Skip Rules and Their Integration with LWD"
+  ],
+  "gemini": [
+    "Comprehensive Resource Efficiency Analysis",
+    "Explore Adaptive LWD Parameter Tuning",
+    "Adaptive Hybridization of Batching and CI-Skip Strategies",
+    "Evaluate on Diverse Languages and Project Scales",
+    "Analyze Broader Resource Impacts Beyond Builds",
+    "Dynamic Parameter Tuning Mechanisms",
+    "Develop Adaptive Parameter Optimization Mechanisms",
+    "Cross-Language and Tool Evaluation of LWD",
+    "Cross-Platform and Language Evaluation",
+    "Integration with Resource Consumption Metrics",
+    "Evaluate LWD in Diverse CI/CD Environments",
+    "Investigate Language-Specific CI-Skip Rules and Their Integration with LWD"
+  ],
+  "grok": [
+    "Explore Adaptive LWD Parameter Tuning",
+    "Adaptive Hybridization of Batching and CI-Skip Strategies",
+    "Evaluate on Diverse Languages and Project Scales",
+    "Analyze Broader Resource Impacts Beyond Builds",
+    "Investigate Language-Specific CI-Skip Rules and Their Integration with LWD",
+    "Dynamic Parameter Tuning Mechanisms",
+    "Develop Adaptive Parameter Optimization Mechanisms",
+    "Cross-Language and Tool Evaluation of LWD",
+    "Cross-Platform and Language Evaluation",
+    "Comprehensive Resource Efficiency Analysis",
+    "Integration with Resource Consumption Metrics",
+    "Evaluate LWD in Diverse CI/CD Environments"
+  ],
+  "qwen": [
+    "Explore Adaptive LWD Parameter Tuning",
+    "Evaluate on Diverse Languages and Project Scales",
+    "Dynamic Parameter Tuning Mechanisms",
+    "Develop Adaptive Parameter Optimization Mechanisms",
+    "Cross-Language and Tool Evaluation of LWD",
+    "Cross-Platform and Language Evaluation",
+    "Analyze Broader Resource Impacts Beyond Builds",
+    "Adaptive Hybridization of Batching and CI-Skip Strategies",
+    "Comprehensive Resource Efficiency Analysis",
+    "Integration with Resource Consumption Metrics",
+    "Evaluate LWD in Diverse CI/CD Environments",
+    "Investigate Language-Specific CI-Skip Rules and Their Integration with LWD"
+  ]
+}

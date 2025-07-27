@@ -1,0 +1,63 @@
+# Limitations Extraction Results
+
+## EXTRACTED_LIMITATIONS
+
+**Item 1:**
+- Title: Limited Resource Metrics  
+- Content: The primary performance metric, “percentage of builds saved,” does not directly quantify wall-clock time, CPU cycles, or energy consumption. Although the paper estimates time saved for 41 projects by approximating batch duration as the last commit’s build time plus bisection overhead, this approach may misrepresent true CI resource usage and limits the interpretation of cost savings.  
+- Source: Response 1  
+
+**Item 2:**
+- Title: Dataset and Domain Constraints  
+- Content: The study focuses exclusively on large, Java-based open-source projects (≥2,000 commits) using TravisCI. CI-Skip rules, in particular, are tailored to Java artifacts (e.g., `.java` vs `.md` changes). Consequently, the findings may not generalize to smaller repositories, proprietary codebases, other languages (e.g., Python, C++), or different CI platforms (e.g., Jenkins, GitLab CI).  
+- Source: Response 1  
+
+**Item 3:**
+- Title: Approximation in Wall-Clock Analysis  
+- Content: Wall-clock time savings rely on the simplifying assumption that a batch build’s duration equals the time of its final commit’s build. This ignores potential variations in parallel test execution, caching effects, or hardware heterogeneity. As a result, conclusions about LWD’s time efficiency—especially relative to the baseline dynamic batching algorithm—may be skewed by these unmodeled factors.  
+- Source: Response 1  
+
+**Item 4:**
+- Title: Limited Generalizability of Dataset  
+- Content: The study's focus on Java-based projects and large, open-source repositories from a specific snapshot of TravisTorrent (January 25, 2017) limits the generalizability of the results. The dataset filtering process, while necessary for focusing the study, removed a substantial portion of the initial data, raising concerns about potential selection bias. The paper explicitly acknowledges that the results may not hold for smaller projects, projects using different programming languages (e.g., Python, JavaScript), or projects employing different CI/CD tools. Since CI systems and build practices can vary significantly across different contexts, the extent to which LWD's performance generalizes to other settings remains an open question.  
+- Source: Response 2  
+
+**Item 5:**
+- Title: Narrow Performance Metric and Resource Considerations  
+- Content: The primary performance metric, "percentage of builds saved," while useful for quantifying the reduction in CI activity, does not fully capture the complexity of CI costs. Factors such as build duration, resource consumption (CPU, memory, network bandwidth), and energy expenditure are not directly accounted for. The approximation of wall-clock time saved, based on the time for the last commit plus bisection time, introduces another source of potential inaccuracy. As the authors note, build duration varied depending on factors that were not easily controlled. While LWD reduces the number of builds, it doesn't guarantee a reduction in all cost factors; a few long-running builds could negate the savings from numerous smaller builds.  
+- Source: Response 2  
+
+**Item 6:**
+- Title: Limited Impact of CI-Skip Integration  
+- Content: The finding that integrating CI-Skip rules with dynamic batching (LWD and the baseline approach) did not yield significant additional build savings is a notable limitation. While CI-Skip rules alone are effective, their combination with dynamic batching offered only marginal improvements. This suggests that the benefits of CI-Skip and dynamic batching may not be additive, possibly due to overlapping coverage. This outcome raises questions about the incremental value of CI-Skip in conjunction with LWD and underscores the need for a more nuanced understanding of their interaction.  
+- Source: Response 2  
+
+**Item 7:**
+- Title: Dataset Specificity and External Validity  
+- Content: The evaluation is restricted to 50 large, open-source Java projects from TravisTorrent (with at least 2,000 commits and master-branch builds), potentially limiting generalizability to smaller projects, other languages, or proprietary systems. For example, CI-Skip rules were designed for Java, and failure rates varied from 5.84% to 98.32% in this dataset, but results may not hold for non-Java ecosystems or tools beyond TravisCI, risking overestimation of LWD's applicability in diverse CI environments.  
+- Source: Response 3  
+
+**Item 8:**
+- Title: Incomplete Performance Metrics  
+- Content: The primary metric, percentage of builds saved, does not fully capture wall-clock time, energy, or resource savings; time estimates were approximated for only 41 projects (using last-commit duration plus bisection), potentially underrepresenting real costs. For instance, while LWD saved more builds than static batching, the baseline dynamic approach often saved more median time with BatchBisect and BatchDivide4, highlighting a trade-off where build count reductions do not always translate to proportional time savings, which could mislead practical adoption.  
+- Source: Response 3  
+
+**Item 9:**
+- Title: Risk of Internal Bias from Single-Author Implementation  
+- Content: All simulation, data processing, and analysis were conducted by one author, introducing potential human error or bias in scripts and data handling, despite mitigation via prior replication packages. This is critical as the build simulator replays 286,848 commits across 39 LWD sub-variants, and any undetected flaws could affect results, such as the non-significant improvements from CI-Skip integration (median 0.87% additional savings), undermining confidence in the findings without multi-author validation.  
+- Source: Response 3  
+
+**Item 10:**
+- Title: Narrow Dataset Scope Limiting Generalizability  
+- Content: The study focused exclusively on Java-based, large open-source projects (≥2,000 commits) using TravisCI, filtered from the TravisTorrent dataset (2017 release). This excludes projects in other languages (e.g., Python, C++) and proprietary systems (e.g., Jenkins, GitHub Actions), limiting external validity. For instance, the CI-Skip rules integrated into the analysis were designed for Java, as noted in the FAQ, which may not apply to projects where non-code changes (e.g., binary files) dominate. Additionally, the exclusion of smaller projects (e.g., <2,000 commits) risks overlooking scenarios where dynamic batching could yield disproportionate benefits due to less stable build patterns.  
+- Source: Response 4  
+
+**Item 11:**
+- Title: Over-Reliance on Build Count as the Primary Metric  
+- Content: While the paper measures success via “percentage of builds saved” relative to TestAll, this metric does not directly quantify time, energy, or computational resource savings—key cost drivers in CI systems. The authors approximated wall-clock time savings for 41/50 projects but relied on simplifications: batch durations were estimated as the last commit’s build time plus bisection overhead, ignoring parallelization or resource contention. For example, LWD BatchBisect saved more builds than baseline dynamic batching but underperformed in wall-clock time for certain fallback algorithms (e.g., BatchDivide4), suggesting a potential disconnect between build count reduction and real-world efficiency.  
+- Source: Response 4  
+
+**Item 12:**
+- Title: Inconclusive Impact of CI-Skip Integration  
+- Content: Although the paper pioneers the empirical combination of batching and CI-Skip rules, the integration yielded only marginal additional savings (median: 0.87% builds saved). This likely stems from methodological constraints: CI-Skip rules were applied before batching, filtering out skippable commits entirely. However, the authors acknowledge that batching’s primary benefit lies in reducing overhead during failure streaks, while CI-Skip mostly targets non-failing commits. Without exploring alternative integration strategies (e.g., skipping within batches or prioritizing CI-Skip during high-success phases), the analysis fails to fully address synergies between these techniques, leaving their combined potential underexplored.  
+- Source: Response 4

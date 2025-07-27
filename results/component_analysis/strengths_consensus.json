@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Large-Scale Empirical Validation Across Diverse Projects",
+    "content": "The study rigorously evaluated LWD on 286,848 commits across 50 open-source Java projects with varying failure rates (5.84%–98.32%). This scale surpasses prior batching studies, which often focused on smaller datasets (e.g., Bavand et al.’s evaluation on 12 projects). The authors used Wilcoxon signed-rank tests and Friedman tests with Conover post-hoc analysis, revealing statistically significant improvements over static batching (41/50 comparisons) and performance parity with state-of-the-art dynamic batching. For instance, LWD BatchBisect saved 10.71% more builds than static batching, while Exponential-2 variants under LWD achieved strong median savings. This empirical robustness strengthens confidence in LWD’s practical utility.",
+    "source": "Response 4"
+  },
+  {
+    "title": "Adherence to Occam's Razor with Simplified Dynamic Batching",
+    "content": "The paper’s introduction of Lightweight Dynamic Batching (LWD) exemplifies Occam’s Razor by achieving comparable performance to state-of-the-art dynamic batching techniques while eliminating complex offline computations. Unlike Bavand et al.’s approach, which relies on precomputed lookup tables and weighted failure rates over historical data, LWD dynamically adjusts batch sizes based solely on the failure rate of the immediately preceding batch. For example, the Linear-4 BatchStop4 variant achieved a median of 45.57% build savings without requiring historical data, demonstrating that local, rule-based updates can match global models. This simplicity reduces overhead, making LWD more practical for real-time CI systems, as evidenced by its ability to function from a project’s first commit without offline setup.",
+    "source": "Response 4"
+  },
+  {
+    "title": "Customizability and Explainability",
+    "content": "LWD’s four core rules (Fallback, Retention, Factor, Customizability) allow engineers to tune minimum/maximum batch sizes, retention/fallback limits, and adjustment factors. As a rule-based system, every decision is transparent—e.g., “if recent failure rate > 40%, next batch size = 1”—which contrasts with opaque machine learning models. This clarity facilitates adoption by build engineers and allows immediate deployment on new projects without historical data.",
+    "source": "Response 1"
+  },
+  {
+    "title": "Empirical Validation and Performance Equivalence",
+    "content": "The empirical evaluation across 286,848 commits from 50 open-source projects using TravisCI provides strong support for the efficacy of LWD. The results demonstrate that LWD achieves performance comparable to the state-of-the-art dynamic batching technique, while significantly outperforming static batching. The authors demonstrate that LWD variants save a median of 4.75% more builds than static batching, with statistically significant differences observed in 41 out of 50 studied pairs of heuristics, and large effect sizes (0.23 to 0.61). The absence of a statistically significant difference between LWD and the baseline dynamic approach is particularly compelling, supporting the claim that LWD, despite its simpler design, is equally effective. These findings align with Occam's Razor, favoring the simpler LWD approach.",
+    "source": "Response 2"
+  },
+  {
+    "title": "Comprehensive Evaluation Methodology and Statistical Analysis",
+    "content": "The paper employs a rigorous evaluation methodology, including a custom build simulator to replay build outcomes and a clearly defined performance metric (percentage of builds saved). The authors use appropriate statistical tests, including Wilcoxon signed-rank tests (for 2 paired distributions) and Friedman tests with post-hoc Conover tests (for >2 paired distributions) to identify significant differences. They also address the potential for Type-I errors by applying Bonferroni correction. The inclusion of effect sizes (Cliff’s Delta and Kendall’s W) provides further context for interpreting the statistical significance of the results. The availability of a replication package strengthens the study's credibility and facilitates independent verification and extension of the findings.",
+    "source": "Response 2"
+  },
+  {
+    "title": "Comprehensive Empirical Evaluation and Reproducibility",
+    "content": "The study employs a rigorous methodology, including a custom build simulator to replay commit outcomes and statistical tests (e.g., Wilcoxon signed-rank and Friedman tests with Bonferroni correction) to compare LWD variants against static and dynamic baselines. For instance, RQ2 shows LWD saves a median 4.75% more builds than static batching, with significant differences in 41 of 50 pairs (large Cliff’s Delta effect sizes of 0.23–0.61). The provision of an online replication package, including datasets and scripts, enhances reproducibility, building on prior works' packages for baselines, which strengthens the validity and allows easy verification.",
+    "source": "Response 3"
+  },
+  {
+    "title": "Simplicity and Comparable Performance to State-of-the-Art",
+    "content": "The paper introduces Lightweight Dynamic Batching (LWD), a simple, fully online algorithm that updates batch sizes based solely on the previous batch's failure rate, avoiding offline lookup tables and complex historical data required by prior dynamic batching techniques like Bavand et al.'s approach. Despite its simplicity, empirical results across 286,848 commits from 50 projects show LWD performs equally well, saving a median of 37.38% to 48.86% builds compared to the TestAll baseline, with no statistical difference from the state-of-the-art. This aligns with Occam's Razor, demonstrating that lightweight, local-knowledge-based methods can match more resource-intensive global models, making LWD practical for real-world CI optimization.",
+    "source": "Response 3"
+  },
+  {
+    "title": "Lightweight and Flexible Dynamic Batching Approach",
+    "content": "The paper's primary strength lies in the introduction of Lightweight Dynamic Batching (LWD), a novel approach to dynamic build batching that is both lightweight and flexible. Unlike the state-of-the-art dynamic batching technique by Bavand et al., which relies on computationally expensive offline simulations and fixed lookup tables, LWD updates batch sizes solely based on the outcome of the immediately preceding batch build (the failure rate). This \"local knowledge\" approach significantly reduces computational overhead and allows for on-the-fly configuration changes to adapt to specific project needs. The simplicity of LWD, based on arithmetic operations and customizable parameters such as retention and fallback limits, makes it more readily deployable and understandable than more complex methods. The five LWD variants (Linear, Exponential, Random, Mixed, and MFU), combined with different fallback algorithms (BatchBisect, BatchStop4, and BatchDivide4), provide a versatile toolkit for build engineers.",
+    "source": "Response 2"
+  },
+  {
+    "title": "Practical Customizability for Real-World CI Systems",
+    "content": "LWD’s design emphasizes engineer-driven configurability, allowing adjustments to max/min batch sizes, fallback limits (e.g., 40% failure rate triggering single-commit batches), and arithmetic factors (e.g., factor 3 for Linear LWD). This flexibility was validated through five LWD variants (Linear, Exponential, Random, Mixed, MFU) and three fallback algorithms (BatchBisect, BatchStop4, BatchDivide4), enabling tailored use cases. For example, during development phases, engineers might favor the MFU variant to default to historically frequent batch sizes, while maintenance phases could prioritize larger batches via Exponential-2. This adaptability aligns with industry needs, as highlighted in the paper’s discussion of proprietary project requirements.",
+    "source": "Response 4"
+  },
+  {
+    "title": "Customizability and Practical Flexibility",
+    "content": "LWD's design incorporates four principles (fallback, retention, factor, and customizability rules) that enable on-the-fly configuration of parameters like batch size limits, factors (e.g., 2 or 3 for exponential variants), and thresholds (e.g., 40% fallback limit). This is exemplified in variants like Linear-4 BatchStop4, which achieved the highest median build savings (45.57%), allowing engineers to adapt to project phases (e.g., conservative sizes during development for quicker feedback). By combining with fallback algorithms like BatchBisect or BatchDivide4, LWD offers flexible, explainable heuristics that outperform static methods without AI overhead.",
+    "source": "Response 3"
+  },
+  {
+    "title": "Comprehensive Empirical Evaluation",
+    "content": "The authors evaluated LWD on 286,848 commits across 50 large Java projects drawn from the TravisTorrent dataset, applying three fallback algorithms (BatchBisect, BatchStop4, BatchDivide4), and comparing 39 LWD sub-variants against static and existing dynamic batching. They employed Wilcoxon signed-rank tests with Bonferroni correction and Friedman tests with post-hoc Conover analyses, reporting significant median build savings (37.38%–48.86% for LWD variants) and demonstrating statistically significant improvements over static batching in 41 of 50 heuristic pairs.",
+    "source": "Response 1"
+  },
+  {
+    "title": "Simplicity and On-the-Fly Adaptation",
+    "content": "The LWD approach requires only the outcome of the immediately preceding batch build to adjust its size, eliminating the need for complex offline lookup tables or weighted smoothing models. For example, the Linear-4 BatchStop4 variant incrementally adjusts the batch by a constant factor of 4 when the failure rate is low, and immediately sets the size to 1 upon detecting a high failure streak. This design adheres to Occam’s Razor, yet achieves comparable performance to Bavand et al.’s state-of-the-art dynamic batching without costly pre-computations.",
+    "source": "Response 1"
+  }
+]

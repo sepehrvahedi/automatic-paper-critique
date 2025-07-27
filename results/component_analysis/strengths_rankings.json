@@ -1,0 +1,61 @@
+{
+  "gpt": [
+    "Large-Scale Empirical Validation Across Diverse Projects",
+    "Comprehensive Empirical Evaluation and Reproducibility",
+    "Adherence to Occam's Razor with Simplified Dynamic Batching",
+    "Customizability and Explainability",
+    "Empirical Validation and Performance Equivalence",
+    "Simplicity and Comparable Performance to State-of-the-Art",
+    "Comprehensive Evaluation Methodology and Statistical Analysis",
+    "Practical Customizability for Real-World CI Systems",
+    "Lightweight and Flexible Dynamic Batching Approach",
+    "Customizability and Practical Flexibility",
+    "Comprehensive Empirical Evaluation",
+    "Simplicity and On-the-Fly Adaptation"
+  ],
+  "gemini": [
+    "Large-Scale Empirical Validation Across Diverse Projects",
+    "Adherence to Occam's Razor with Simplified Dynamic Batching",
+    "Comprehensive Evaluation Methodology and Statistical Analysis",
+    "Customizability and Explainability",
+    "Lightweight and Flexible Dynamic Batching Approach",
+    "Empirical Validation and Performance Equivalence",
+    "Large-Scale Empirical Validation Across Diverse Projects",
+    "Adherence to Occam's Razor with Simplified Dynamic Batching",
+    "Comprehensive Evaluation Methodology and Statistical Analysis",
+    "Comprehensive Empirical Evaluation and Reproducibility",
+    "Simplicity and Comparable Performance to State-of-the-Art",
+    "Practical Customizability for Real-World CI Systems",
+    "Customizability and Practical Flexibility",
+    "Comprehensive Empirical Evaluation",
+    "Simplicity and On-the-Fly Adaptation"
+  ],
+  "grok": [
+    "Large-Scale Empirical Validation Across Diverse Projects",
+    "Adherence to Occam's Razor with Simplified Dynamic Batching",
+    "Customizability and Explainability",
+    "Empirical Validation and Performance Equivalence",
+    "Comprehensive Empirical Evaluation and Reproducibility",
+    "Simplicity and Comparable Performance to State-of-the-Art",
+    "Comprehensive Evaluation Methodology and Statistical Analysis",
+    "Practical Customizability for Real-World CI Systems",
+    "Lightweight and Flexible Dynamic Batching Approach",
+    "Customizability and Practical Flexibility",
+    "Comprehensive Empirical Evaluation",
+    "Simplicity and On-the-Fly Adaptation"
+  ],
+  "qwen": [
+    "Large-Scale Empirical Validation Across Diverse Projects",
+    "Adherence to Occam's Razor with Simplified Dynamic Batching",
+    "Customizability and Explainability",
+    "Empirical Validation and Performance Equivalence",
+    "Comprehensive Empirical Evaluation and Reproducibility",
+    "Simplicity and Comparable Performance to State-of-the-Art",
+    "Comprehensive Evaluation Methodology and Statistical Analysis",
+    "Practical Customizability for Real-World CI Systems",
+    "Lightweight and Flexible Dynamic Batching Approach",
+    "Customizability and Practical Flexibility",
+    "Comprehensive Empirical Evaluation",
+    "Simplicity and On-the-Fly Adaptation"
+  ]
+}
